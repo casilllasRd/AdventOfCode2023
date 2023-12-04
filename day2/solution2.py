@@ -1,46 +1,59 @@
-def solution() -> None:
-    puzzle_input = open("puzzle-input.txt")
-    puzzle_data: str = puzzle_input.read()
-    puzzle_list: list[str] = puzzle_data.split("\n")
+def solution() -> None: 
+    puzzle_data: list[str] = get_puzzle_data()
+    answer: int = get_power_sum(puzzle_data)
 
-    print(get_calibration_sum(puzzle_list))
+    print(answer)
 
 
-def get_calibration_sum(puzzle_list: list[str]) -> int:
-    digits: dict[str] = {
-    "one": "1",
-    "two": "2",
-    "three": "3",
-    "four": "4",
-    "five": "5",
-    "six": "6",
-    "seven": "7",
-    "eight": "8",
-    "nine": "9"
-    }
+def get_puzzle_data() -> list[str]:
+    file: str = "puzzle-input.txt"
+    puzzle_input = open(file)
+    puzzle_data: list[str] = puzzle_input.readlines()
+
+    return puzzle_data
+
+
+def get_power_sum(puzzle_data: list[str]) -> int:
+    powers: list[int] = []
+
+    for game in puzzle_data:
+        game_samples: dict[list] = {
+            "red": [],
+            "green": [],
+            "blue": []
+        }
+        reveals: list[str] = get_reveals(game)
+
+        for reveal in reveals:
+            for color in game_samples.keys():
+                if color in reveal:
+                    cube_num: int = get_digits_from_string(reveal)
+                    game_samples[color].append(cube_num)
+
+        powers.append(get_power(game_samples))
     
-    calibration_values: list[int] = []
+    return sum(powers)
 
-    for line in puzzle_list:
-        first_cv: int = 0
-        last_cv: int = 0
 
-        if line[0].isdigit(): first_cv = line[0]
-        if line[-1].isdigit(): last_cv = line[-1]
+def get_reveals(game: str) -> list[str]:
+    reveals: str = game.split(":")[1]
+    return reveals.replace(";", ",").split(",")
 
-        for i in range(len(line)):
-            for written_digit, numerical_digit in digits.items():
-                if first_cv == 0 and line.startswith(written_digit, i):
-                    first_cv = numerical_digit
-                if line.startswith(written_digit, i):
-                    last_cv = numerical_digit
-                
-            if line[i].isdigit():
-                if first_cv == 0:
-                    first_cv = line[i]
-                last_cv = line[i]
-        calibration_values.append(int("".join([first_cv, last_cv])))
-        
-    return(sum(calibration_values))
+
+def get_digits_from_string(s: str) -> int:
+    digits: str = "".join([char for char in s if char.isdigit()])
+    return int(digits)
+
+
+def get_power(game_samples: dict[list]) -> int:
+    power: int = 0
+    for sample in game_samples.values():
+        if power == 0: 
+            power = max(sample)
+        else: 
+            power *= max(sample)
+
+    return power
+
 
 solution()
