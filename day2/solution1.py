@@ -24,7 +24,7 @@ def get_valid_game_sum(puzzle_data: list[str]) -> int:
     return valid_games_sum
         
 
-def check_valid_game(reveals: str, game_params: dict[str]) -> bool:
+def check_valid_game(reveals: str, game_params: dict[int]) -> bool:
     reveals: list[str] = get_reveals(reveals)
 
     for reveal in reveals:
