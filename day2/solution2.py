@@ -1,3 +1,6 @@
+import math
+
+
 def solution() -> None: 
     puzzle_data: list[str] = get_puzzle_data()
     answer: int = get_power_sum(puzzle_data)
@@ -14,25 +17,25 @@ def get_puzzle_data() -> list[str]:
 
 
 def get_power_sum(puzzle_data: list[str]) -> int:
-    powers: list[int] = []
+    powers_sum: int = 0
 
     for game in puzzle_data:
-        game_samples: dict[list] = {
-            "red": [],
-            "green": [],
-            "blue": []
+        game_samples: dict[int] = {
+            "red": 0,
+            "green": 0,
+            "blue": 0
         }
         reveals: list[str] = get_reveals(game)
 
         for reveal in reveals:
-            for color in game_samples.keys():
+            for color, current_sample in game_samples.items():
                 if color in reveal:
                     cube_num: int = get_digits_from_string(reveal)
-                    game_samples[color].append(cube_num)
+                    game_samples[color] = max(cube_num, current_sample)
 
-        powers.append(get_power(game_samples))
+        powers_sum += get_power(game_samples)
     
-    return sum(powers)
+    return powers_sum
 
 
 def get_reveals(game: str) -> list[str]:
@@ -45,15 +48,8 @@ def get_digits_from_string(s: str) -> int:
     return int(digits)
 
 
-def get_power(game_samples: dict[list]) -> int:
-    power: int = 0
-    for sample in game_samples.values():
-        if power == 0: 
-            power = max(sample)
-        else: 
-            power *= max(sample)
-
-    return power
+def get_power(game_samples: dict[int]) -> int:
+    return math.prod(game_samples.values())
 
 
 solution()
