@@ -22,8 +22,8 @@ def get_scratch_card_total(scratch_card_data: list[str]) -> int:
         winners = winners.split()
         card_reveals = card_reveals.split()
 
-        matches: list[str] = [match for match in winners if match in card_reveals]
-        points: int = 0 if len(matches) == 0 else 2 ** (len(matches) - 1)
+        matches: int = len([match for match in winners if match in card_reveals])
+        points: int = 2 ** (matches - 1) if matches else 0
 
         scratch_card_total += points
 
