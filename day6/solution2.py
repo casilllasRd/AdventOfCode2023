@@ -23,6 +23,7 @@ def get_time_and_distance(race_data: list[str]) -> tuple[int, int]:
 
 def get_row_entry(row: str) -> int:
     row_digits: list[str] = [char for char in row.split(":")[1].split()]
+    
     return int("".join(row_digits))
 
 
