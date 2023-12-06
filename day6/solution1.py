@@ -16,9 +16,9 @@ def get_puzzle_data() -> list[str]:
 
 
 def get_times_and_distances(race_data: list[str]) -> tuple[list[int], list[int]]:
-    Ts, Ds = race_data
-    race_times: list[int] = get_row_data(Ts)
-    record_distances: list[int] = get_row_data(Ds)
+    times_row, distances_row = race_data
+    race_times: list[int] = get_row_data(times_row)
+    record_distances: list[int] = get_row_data(distances_row)
 
     return race_times, record_distances
 
