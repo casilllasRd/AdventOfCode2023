@@ -45,26 +45,31 @@ def compare_hand_type(hand: str) -> str:
     TWO_PAIR: str = "TWO"
     ONE_PAIR: str =  "ONE"
     HIGH_CARD: str = "HIGH CARD"
-    hand_counts: list[tuple[str, int]]= list(set([(h, hand.count(h)) for h in hand]))
+    hand_counts: list[tuple[str, int]] = sorted(
+            list(set([(card, hand.count(card)) for card in hand])), 
+            key=lambda card: card[1],
+            reverse=True
+        )
+    highest_card_count = hand_counts[0][1]
     
     if len(hand_counts) == 1:
         return FIVE_OF_A_KIND
+    
     elif len(hand_counts) == 2: 
-        first_card_count = hand_counts[0][1]
-        if first_card_count == 1 or first_card_count == 4:
+        if highest_card_count == 4:
             return FOUR_OF_A_KIND
-        elif first_card_count == 2 or first_card_count == 3:
+        elif highest_card_count == 3:
             return FULL_HOUSE
+        
     elif len(hand_counts) == 3:
-        set_of_counts: set[int] = set([hand_counts[0][1], hand_counts[1][1], hand_counts[2][1]])
-        THREE_OF_A_KIND_SET: set[int] = set([1, 3])
-        TWO_PAIR_SET: set[int] = set([1, 2])
-        if set_of_counts == THREE_OF_A_KIND_SET:
+        if highest_card_count == 3:
             return THREE_OF_A_KIND
-        elif set_of_counts == TWO_PAIR_SET:
+        elif highest_card_count == 2:
             return TWO_PAIR
+        
     elif len(hand_counts) == 4:
         return ONE_PAIR
+    
     elif len(hand_counts) == 5:
         return HIGH_CARD
 
