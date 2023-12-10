@@ -70,7 +70,7 @@ def compare_hand_type(hand: str) -> str:
 
 
 def get_ranked_cards(hand_types: dict[list]) -> tuple[list[str], dict[int]]:
-    order: dict[str, int] = {
+    order: dict[str, str] = {
         "A": "a",
         "K": "b",
         "Q": "c",
