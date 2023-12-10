@@ -1,145 +1,92 @@
---- Day 5: If You Give A Seed A Fertilizer ---
+--- Day 9: Mirage Maintenance ---
 
-You take the boat and find the gardener right where you were told he would be: managing a giant "garden" that looks more to you like a farm.
+You ride the camel through the sandstorm and stop where the ghost's maps told you to stop. 
+The sandstorm subsequently subsides, somehow seeing you standing at an oasis!
 
-"A water source? Island Island is the water source!" You point out that Snow Island isn't receiving any water.
+The camel goes to get some water and you stretch your neck. 
+As you look up, you discover what must be yet another giant floating island, this one made of metal! 
+That must be where the parts to fix the sand machines come from.
 
-"Oh, we had to stop the water because we ran out of sand to filter it with! Can't make snow with dirty water. 
-Don't worry, I'm sure we'll get more sand soon; we only turned off the water a few days... weeks... oh no." 
-His face sinks into a look of horrified realization.
+There's even a hang glider partially buried in the sand here; once the sun rises and heats up the sand, 
+you might be able to use the glider and the hot air to get all the way up to the metal island!
 
-"I've been so busy making sure everyone here has food that I completely forgot to check why we stopped getting more sand! 
-There's a ferry leaving soon that is headed over in that direction - it's much faster than your boat. Could you please go check it out?"
+While you wait for the sun to rise, you admire the oasis hidden here in the middle of Desert Island. 
+It must have a delicate ecosystem; you might as well take some ecological readings while you wait. 
+Maybe you can report any environmental instabilities you find to someone so the oasis can be around for the next sandstorm-worn traveler.
 
-You barely have time to agree to this request when he brings up another. 
-"While you wait for the ferry, maybe you can help us with our food production problem. 
-The latest Island Island Almanac just arrived and we're having trouble making sense of it."
+You pull out your handy Oasis And Sand Instability Sensor and analyze your surroundings. 
+The OASIS produces a report of many values and how they are changing over time (your puzzle input). 
+Each line in the report contains the history of a single value. For example:
 
-The almanac (your puzzle input) lists all of the seeds that need to be planted. 
-It also lists what type of soil to use with each kind of seed, what type of fertilizer to use with each kind of soil, 
-what type of water to use with each kind of fertilizer, and so on. Every type of seed, soil, 
-fertilizer and so on is identified with a number, but numbers are reused by each category - that is, 
-soil 123 and fertilizer 123 aren't necessarily related to each other.
+0 3 6 9 12 15
+1 3 6 10 15 21
+10 13 16 21 30 45
 
-For example:
+To best protect the oasis, your environmental report should include a prediction of the next value in each history. 
+To do this, start by making a new sequence from the difference at each step of your history. 
+If that sequence is not all zeroes, repeat this process, using the sequence you just generated as the input sequence. 
+Once all of the values in your latest sequence are zeroes, you can extrapolate what the next value of the original history should be.
 
-seeds: 79 14 55 13
+In the above dataset, the first history is 0 3 6 9 12 15. 
+Because the values increase by 3 each step, the first sequence of differences that you generate will be 3 3 3 3 3. 
+Note that this sequence has one fewer value than the input sequence because at each step it considers two numbers from the input. 
+Since these values aren't all zero, repeat the process: the values differ by 0 at each step, so the next sequence is 0 0 0 0. 
+This means you have enough information to extrapolate the history! Visually, these sequences can be arranged like this:
 
-seed-to-soil map:
-50 98 2
-52 50 48
+0   3   6   9  12  15
+  3   3   3   3   3
+    0   0   0   0
 
-soil-to-fertilizer map:
-0 15 37
-37 52 2
-39 0 15
+To extrapolate, start by adding a new zero to the end of your list of zeroes; 
+because the zeroes represent differences between the two values above them, 
+this also means there is now a placeholder in every sequence above it:
 
-fertilizer-to-water map:
-49 53 8
-0 11 42
-42 0 7
-57 7 4
+0   3   6   9  12  15   B
+  3   3   3   3   3   A
+    0   0   0   0   0
 
-water-to-light map:
-88 18 7
-18 25 70
+You can then start filling in placeholders from the bottom up. 
+A needs to be the result of increasing 3 (the value to its left) by 0 (the value below it); 
+this means A must be 3:
 
-light-to-temperature map:
-45 77 23
-81 45 19
-68 64 13
+0   3   6   9  12  15   B
+  3   3   3   3   3   3
+    0   0   0   0   0
+Finally, you can fill in B, which needs to be the result of increasing 15 (the value to its left) by 3 (the value below it), or 18:
 
-temperature-to-humidity map:
-0 69 1
-1 0 69
+0   3   6   9  12  15  18
+  3   3   3   3   3   3
+    0   0   0   0   0
 
-humidity-to-location map:
-60 56 37
-56 93 4
+So, the next value of the first history is 18.
 
-The almanac starts by listing which seeds need to be planted: seeds 79, 14, 55, and 13.
+Finding all-zero differences for the second history requires an additional sequence:
 
-The rest of the almanac contains a list of maps which describe how to convert numbers from a source category into numbers in a destination category. 
-That is, the section that starts with seed-to-soil map: describes how to convert a seed number (the source) to a soil number (the destination). 
-This lets the gardener and his team know which soil to use with which seeds, which water to use with which fertilizer, and so on.
+1   3   6  10  15  21
+  2   3   4   5   6
+    1   1   1   1
+      0   0   0
 
-Rather than list every source number and its corresponding destination number one by one, 
-the maps describe entire ranges of numbers that can be converted. 
-Each line within a map contains three numbers: the destination range start, the source range start, and the range length.
+Then, following the same process as before, work out the next value in each sequence from the bottom up:
 
-Consider again the example seed-to-soil map:
+1   3   6  10  15  21  28
+  2   3   4   5   6   7
+    1   1   1   1   1
+      0   0   0   0
 
-50 98 2
-52 50 48
+So, the next value of the second history is 28.
 
-The first line has a destination range start of 50, a source range start of 98, and a range length of 2. 
-This line means that the source range starts at 98 and contains two values: 98 and 99. 
-The destination range is the same length, but it starts at 50, so its two values are 50 and 51. 
-With this information, you know that seed number 98 corresponds to soil number 50 and that seed number 99 corresponds to soil number 51.
+The third history requires even more sequences, but its next value can be found the same way:
 
-The second line means that the source range starts at 50 and contains 48 values: 50, 51, ..., 96, 97. 
-This corresponds to a destination range starting at 52 and also containing 48 values: 52, 53, ..., 98, 99. 
-So, seed number 53 corresponds to soil number 55.
+10  13  16  21  30  45  68
+   3   3   5   9  15  23
+     0   2   4   6   8
+       2   2   2   2
+         0   0   0
 
-Any source numbers that aren't mapped correspond to the same destination number. So, seed number 10 corresponds to soil number 10.
+So, the next value of the third history is 68.
 
-So, the entire list of seed numbers and their corresponding soil numbers looks like this:
+If you find the next value for each history in this example and add them together, you get 114.
 
-seed  soil
-0     0
-1     1
-...   ...
-48    48
-49    49
-50    52
-51    53
-...   ...
-96    98
-97    99
-98    50
-99    51
-
-With this map, you can look up the soil number required for each initial seed number:
-
-Seed number 79 corresponds to soil number 81.
-Seed number 14 corresponds to soil number 14.
-Seed number 55 corresponds to soil number 57.
-Seed number 13 corresponds to soil number 13.
-
-The gardener and his team want to get started as soon as possible, so they'd like to know the closest location that needs a seed. 
-Using these maps, find the lowest location number that corresponds to any of the initial seeds. 
-To do this, you'll need to convert each seed number through other categories until you can find its corresponding location number. 
-
-In this example, the corresponding types are:
-
-Seed 79, soil 81, fertilizer 81, water 81, light 74, temperature 78, humidity 78, location 82.
-Seed 14, soil 14, fertilizer 53, water 49, light 42, temperature 42, humidity 43, location 43.
-Seed 55, soil 57, fertilizer 57, water 53, light 46, temperature 82, humidity 82, location 86.
-Seed 13, soil 13, fertilizer 52, water 41, light 34, temperature 34, humidity 35, location 35.
-
-So, the lowest location number in this example is 35.
-
-What is the lowest location number that corresponds to any of the initial seed numbers? [388071289]
-
---- Part Two ---
-
-Everyone will starve if you only plant such a small number of seeds. 
-Re-reading the almanac, it looks like the seeds: line actually describes ranges of seed numbers.
-
-The values on the initial seeds: line come in pairs. Within each pair, 
-the first value is the start of the range and the second value is the length of the range. So, in the first line of the example above:
-
-seeds: 79 14 55 13
-
-This line describes two ranges of seed numbers to be planted in the garden. 
-The first range starts with seed number 79 and contains 14 values: 79, 80, ..., 91, 92. 
-The second range starts with seed number 55 and contains 13 values: 55, 56, ..., 66, 67.
-
-Now, rather than considering four seed numbers, you need to consider a total of 27 seed numbers.
-
-In the above example, the lowest location number can be obtained from seed number 82, 
-which corresponds to soil 84, fertilizer 84, water 84, light 77, temperature 45, humidity 46, and location 46. 
-So, the lowest location number is 46.
-
-Consider all of the initial seed numbers listed in the ranges on the first line of the almanac. 
-What is the lowest location number that corresponds to any of the initial seed numbers?
+Analyze your OASIS report and extrapolate the next value for each history. 
+What is the sum of these extrapolated values? [1789635132]
