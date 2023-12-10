@@ -42,6 +42,8 @@ def get_number_of_steps_required(instructions: str, nodes: dict[str, tuple[str, 
 
     while not found_final_location:
         for instruction in instructions:
+            steps += 1
+
             if instruction == LEFT:
                 current_location = nodes[current_location][0]
             elif instruction == RIGHT:
@@ -49,11 +51,8 @@ def get_number_of_steps_required(instructions: str, nodes: dict[str, tuple[str, 
 
             if current_location == final_location:
                 found_final_location = True
-                steps += 1
                 break
                 
-            steps += 1
-
     return steps
 
 
