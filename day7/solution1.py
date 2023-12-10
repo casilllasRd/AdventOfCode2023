@@ -89,10 +89,10 @@ def get_ranked_cards(hand_types: dict[list]) -> tuple[list[str], dict[int]]:
     hands_dict: dict[str, int] = {}
 
     for rank_group in hand_types.values():
-        rank_sorted: list = []
+        rank_sorted: list[str] = []
         for hand_bid in rank_group:
             hand, bid = hand_bid
-            converted_card = "".join([order[char] for char in hand])
+            converted_card: str = "".join([order[char] for char in hand])
             rank_sorted.append(converted_card)
             hands_dict[converted_card] = bid
         ranked_cards += sorted(rank_sorted)
