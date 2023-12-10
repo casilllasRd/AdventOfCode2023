@@ -3,6 +3,13 @@ def main() -> None:
     print(solution(FILE))
 
 
+def solution(file_name: str) -> int:
+    seed_data: list[str] = get_puzzle_data(file_name)
+    answer: int = get_lowest_location(seed_data)
+
+    return answer
+
+
 def get_puzzle_data(file_name: str) -> list[str]:
     puzzle_data: list[str] = open(file_name).read().split("\n")
     
@@ -59,13 +66,6 @@ def convert_source_to_dest(source: int, maps: list[list[int]]) -> int:
             return dest
         
     return dest
-
-
-def solution(file_name: str) -> int:
-    seed_data: list[str] = get_puzzle_data(file_name)
-    answer: int = get_lowest_location(seed_data)
-
-    return answer
 
 
 main()
