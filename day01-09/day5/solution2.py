@@ -25,10 +25,20 @@ def get_lowest_location(seed_data: list[str]) -> int:
 
 
 def get_seeds_and_almanac(seed_data: list[str]) -> tuple[list[int], list[str]]:
-    seeds: list[int] = [int(seed) for seed in seed_data[0].split(":")[1].split()]
+    seed_ranges: list[int] = [int(seed) for seed in seed_data[0].split(":")[1].split()]
+
+    seeds = []
+    for i in range(0, len(seed_ranges), 2):
+        seed_start, seed_range_length = seed_ranges[i], seed_ranges[i + 1]
+        s = list(range(seed_start, seed_start+seed_range_length))
+        seeds += s
+
+    print(len(seeds))
+
+    # seeds: list[int] = [int(seed) for seed in seed_data[0].split(":")[1].split()]
     almanac: list[str] = [line for line in seed_data[1:] if line != ""]
 
-    return seeds, almanac
+    return list(tuple(seeds)), almanac
 
 
 def get_almanac_maps(almanac: list[str]) -> dict[list]:
