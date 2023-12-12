@@ -11,7 +11,7 @@ def solution(file_name: str) -> int:
     galaxy_coords: dict[int, list[int]] = get_galaxy_coords(space_data)
     empty_rows, empty_cols = get_empty_rows_and_cols(space_data)
 
-    expansion_factor: int = 2
+    expansion_factor: int = 1_000_000
     expanded_galaxy_coords: dict[int, list[int]] = get_expanded_coords(expansion_factor, galaxy_coords, empty_rows, empty_cols)
 
     galaxy_pairs: list[tuple[int, int]] = get_galaxy_pairs(len(expanded_galaxy_coords))
