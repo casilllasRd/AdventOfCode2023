@@ -1,3 +1,5 @@
+# test comment
+
 def solution() -> None:
     puzzle_input = open("puzzle-input.txt")
     puzzle_data: str = puzzle_input.read()
