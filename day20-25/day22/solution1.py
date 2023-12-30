@@ -13,7 +13,7 @@ class Brick:
 
 
 def main() -> None:
-    input_file: str = "test-input.txt"
+    input_file: str = "puzzle-input.txt"
     answer: int = solution(input_file)
 
     print(answer)
@@ -67,8 +67,9 @@ def move_brick(current_brick: Brick, settled_bricks: list[Brick]) -> None:
     if len(current_brick.supported_by) != 0:
         current_brick.settled = True
     
-    current_brick.pos1.z += 1
-    current_brick.pos2.z += 1
+    if not current_brick.settled:
+        current_brick.pos1.z -= 1
+        current_brick.pos2.z -= 1
 
 
 def check_collision(brick1: Brick, brick2: Brick) -> bool:
